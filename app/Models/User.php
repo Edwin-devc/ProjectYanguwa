@@ -47,14 +47,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function setPasswordAttribute($value)
-    {
-        if (!empty($value)) {
-            // Hash the password before saving
-            $this->attributes['password'] = Hash::make($value);
-        }
-    }
-
     public function bookings()
     {
         return $this->hasMany(Booking::class);

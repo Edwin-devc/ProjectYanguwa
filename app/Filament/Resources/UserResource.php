@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -42,7 +43,8 @@ class UserResource extends Resource
                     ->password()
                     ->required()
                     ->autocomplete('new-password')
-                    ->disabled(fn ($get) => $get('id') !== null),
+                    ->disabled(fn ($get) => $get('id') !== null)
+                    ->dehydrateStateUsing(fn(string $state):string => Hash::make($state)),
                 Forms\Components\TextInput::make('source')
                     ->label('Source')
                     ->disabled(),

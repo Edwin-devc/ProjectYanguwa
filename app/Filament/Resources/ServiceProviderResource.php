@@ -34,7 +34,7 @@ class ServiceProviderResource extends Resource
                     ->label('Email')
                     ->email()
                     ->required()
-                    ->unique(),
+                    ->unique(ignoreRecord:true),
                 Forms\Components\TextInput::make('phone')
                     ->label('Phone')
                     ->required(),

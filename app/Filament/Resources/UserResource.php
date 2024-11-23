@@ -13,12 +13,13 @@ use Filament\Tables\Table;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\ServiceProviderResource;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     protected static ?string $navigationGroup = 'Users';
 
@@ -39,11 +40,13 @@ class UserResource extends Resource
                     ->multiple()
                     ->preload()
                     ->searchable()
-                    ->disabled(fn ($get) => $get('source') === 'api_only'),
+                    ->reactive()
+                    ->disabled(fn ($get) => $get('source') === 'api_only')
+                    ->afterStateUpdated(fn ($state, callable $set) => $set('is_service_provider', in_array('service_provider', $state))),
                 Forms\Components\TextInput::make('password')
                     ->label('Password')
                     ->password()
-                    ->required()
+                    // ->required()
                     ->autocomplete('new-password')
                     ->disabled(fn ($get) => $get('id') !== null)
                     ->dehydrateStateUsing(fn(string $state):string => Hash::make($state)),

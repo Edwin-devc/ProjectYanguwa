@@ -15,11 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
-            $table->decimal('price', 8, 2);
             $table->string('category');
             $table->boolean('available')->default(true);
             $table->timestamps();
-            $table->foreignId('service_provider_id')->constrained('service_providers')->onDelete('cascade');
         });
     }
 

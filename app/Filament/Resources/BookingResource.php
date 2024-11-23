@@ -45,8 +45,9 @@ class BookingResource extends Resource
                     ->label('Status')
                     ->options([
                         'pending' => 'Pending',
-                        'approved' => 'Approved',
-                        'rejected' => 'Rejected',
+                        'confirmed' => 'Confirmed',
+                        'completed' => 'Completed',
+                        'cancelled' => 'Cancelled',
                     ])
                     ->required(),
             ]);

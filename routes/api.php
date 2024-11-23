@@ -27,6 +27,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/services', [ServiceController::class, 'index']);
 Route::get('/services/{id}', [ServiceController::class, 'show']);
 // Route::get('/services/search', [ServiceController::class, 'findByName']);
+Route::get('/services/{id}/with-providers', [ServiceController::class, 'showWithServiceProviders']);
 
 Route::get('/bookings', [BookingController::class, 'index']);
 Route::post('/bookings', [BookingController::class, 'store']);

@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ServiceProviderResource\Pages;
 use App\Filament\Resources\ServiceProviderResource\RelationManagers;
 use App\Models\ServiceProvider;
+use App\Models\Service;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class ServiceProviderResource extends Resource
 {
@@ -42,6 +44,14 @@ class ServiceProviderResource extends Resource
                 Forms\Components\Toggle::make('verified')
                     ->label('Verified')
                     ->required(),
+                Forms\Components\Select::make('services')
+                    ->label('Services Provided')
+                    ->relationship('services', 'name') // Use the relationship defined in the model
+                    ->required()
+                    ->multiple(),
+                Forms\Components\TextInput::make('price')
+                    ->label('Rate')
+                    ->required(),
                 Forms\Components\FileUpload::make('profile_picture')
                     ->label('Profile Picture')
                     ->image()
@@ -68,6 +78,9 @@ class ServiceProviderResource extends Resource
                 Tables\Columns\IconColumn::make('verified')
                     ->label('Verified')
                     ->boolean()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('service.name')
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\ImageColumn::make('profile_picture')
                     ->label('Profile Picture')

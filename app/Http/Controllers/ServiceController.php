@@ -16,7 +16,7 @@ class ServiceController extends Controller
     public function show($id)
     {
         // Retrieve a single service by
-        $service = Service::find($id);
+        $service = Service::with('serviceProviders')->find($id);
 
         if (!$service) {
             return response()->json(['message' => 'Service not found'], 404);
@@ -29,7 +29,7 @@ class ServiceController extends Controller
     {
         // Get the 'name' parameter from the query string
         $name = $request->input('name');
-        
+
         // Check if 'name' is provided
         if (!$name) {
             return response()->json(['message' => 'Please provide a service name'], 400);

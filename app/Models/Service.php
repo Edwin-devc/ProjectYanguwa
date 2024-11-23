@@ -3,15 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 
 class Service extends Model
 {
     protected $fillable = [
-        'service_provider_id', 'name', 'description', 'price', 'category', 'available'
+        'name', 'description', 'category', 'available'
     ];
 
-    public function serviceProvider()
-    {
-        return $this->belongsTo(ServiceProvider::class);
+    public function serviceProviders(){
+        return $this->belongsToMany(ServiceProvider::class, 'service_provider_service', 'service_id', 'service_provider_id')
+            ->withTimestamps();
     }
 }

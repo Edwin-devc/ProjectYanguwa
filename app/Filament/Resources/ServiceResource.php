@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class ServiceResource extends Resource
 {
@@ -20,8 +21,6 @@ class ServiceResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Services Management';
-
-    protected static ?string $navigationBadge = 'New';
 
     public static function form(Form $form): Form
     {
@@ -32,23 +31,20 @@ class ServiceResource extends Resource
                     ->required(),
                 Forms\Components\Textarea::make('description')
                     ->label('Description')
-                    ->required(),
-                Forms\Components\TextInput::make('price')
-                    ->numeric()
-                    ->label('Price')
-                    ->required(),
-                Forms\Components\Select::make('service_provider_id')
-                    ->label('Service Provider')
-                    ->options(
-                        \App\Models\ServiceProvider::all()->pluck('name', 'id')
-                    )
-                    ->required(),
+                ->required(),
                 Forms\Components\TextInput::make('category')
                     ->label('Category')
                     ->required(),
                 Forms\Components\Toggle::make('available')
                     ->label('Available')
                     ->required(),
+                Forms\Components\Select::make('service_provider_id')
+                    ->label('Service Provider')
+                    ->options(
+                        \App\Models\ServiceProvider::all()->pluck('name', 'id')
+                    )
+                    ->hidden(fn ($state) => Auth::check() && !Auth::user()->is_admin) // Hide the select if the user is a service provider
+                    ->default(Auth::user()->id),
             ]);
     }
 
@@ -61,10 +57,7 @@ class ServiceResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('description')
                     ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('price')
-                    ->searchable()
-                    ->sortable(),
+                ->sortable(),
                 Tables\Columns\TextColumn::make('category')
                     ->searchable()
                     ->sortable(),
